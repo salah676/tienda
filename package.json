@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "turbo dev",
     "build": "turbo build",
+    "build:web": "cd apps/web && npm run build",
     "lint": "turbo lint",
     "db:generate": "cd packages/db && npx prisma generate",
     "db:push": "cd packages/db && npx prisma db push",
