@@ -1,68 +1,109 @@
-# Debt Manager SaaS - Implementation Status
+# Estado de Implementación - Debt-Manager SaaS
 
-## Goal
-Create complete Debt-Manager SaaS with Next.js SuperAdmin (Vercel) and unified Flutter app (Admin + Client)
+## 📋 Resumen del Proyecto
 
-## Architecture
-- **SuperAdmin Web**: Next.js 16 full-stack on Vercel
-- **Mobile App**: Single Flutter app with role-based views (Admin/Client)
-- **Database**: SQLite for dev, PostgreSQL for production (Vercel Postgres)
+**Sistema:** SaaS de gestión de deudas para tiendas
+- **Mercado:** Marruecos (WafaCash, CashPlus)
+- **Offline:** Incluido desde el inicio
+- **App Cliente:** Nativa (Expo/React Native)
+- **Plan Gratuito:** Incluido (10 clientes + Google Ads)
 
-## Progress
+---
 
-### Done
-1. **Next.js SuperAdmin Web** (`apps/superadmin-web/`)
-   - Next.js 16.2.6 with TypeScript, Tailwind CSS
-   - Prisma 5 with SQLite (dev) / PostgreSQL (production)
-   - JWT authentication with jose
-   - Full API routes: auth, tenants, plans, clients, debts, payments
-   - Dashboard, Login, Tenants, Plans pages
-   - Database seeded with 3 plans (Bronce, Oro, Premium) and SuperAdmin
+## ✅ COMPLETADO
 
-2. **Unified Flutter App** (`apps/debt_manager/`)
-   - Role-based views (SuperAdmin, Admin Tienda, Cliente)
-   - Login with toggle between SuperAdmin and Admin Tienda
-   - Admin screens: Dashboard, Tenants, Plans, Clients, Debts, Payments
-   - Client screens: Home (deuda total), History (pagos), Profile
-   - All screens analyze with no errors
+### Fase 1: Fundamentos
+- Estructura monorepo (Turbo)
+- Next.js 14 + React + TypeScript
+- Prisma + PostgreSQL schema (14 modelos)
+- Tailwind CSS + ShadCN/UI components
+- NextAuth.js autenticación
 
-3. **Models created in Prisma**:
-   - Plan, Tenant, User, Client, Category, Product, Debt, DebtItem, Payment, SuperAdmin
+### Fase 2: SuperAdmin
+- Dashboard con estadísticas
+- Gestión tiendas (CRUD)
+- Gestión planes (Bronce, Oro, Premium)
+- **NUEVO:** Plan Gratuito (FREE - 10 clientes)
+- **NUEVO:** Configuración con Google Ads
+- Chat de soporte
 
-4. **API Endpoints created**:
-   - POST `/api/auth/login` - SuperAdmin login
-   - POST `/api/auth/tenant-login` - Tenant/Admin login
-   - POST `/api/auth/logout` - Logout
-   - GET `/api/auth/me` - Get current user
-   - GET `/api/superadmin/stats` - Dashboard stats
-   - GET/POST `/api/superadmin/tenants` - Manage tenants
-   - GET/POST `/api/superadmin/plans` - Manage plans
-   - GET/POST `/api/clients` - Manage clients
-   - GET/POST `/api/debts` - Manage debts
-   - GET/POST `/api/payments` - Manage payments
-   - GET/POST `/api/products` - Manage products
-   - GET `/api/client/debts` - Client view debts
-   - GET `/api/client/payments` - Client view payments
+### Fase 3: Admin Tienda
+- Dashboard con métricas
+- Clientes (CRUD + foto, teléfono WhatsApp)
+- Inventario flexible (PIEZA/KILO/GRAMO/LITRO)
+- Categorías de productos
+- Registro de deudas
+- Gestión de pagos
+- Personalización de tienda (logo, colores)
 
-### Pending
-1. Deploy Next.js to Vercel
-2. Set up Vercel Postgres for production
-3. Configure environment variables on Vercel
+### Fase 4: App Cliente Móvil (Expo)
+- Login por teléfono
+- Dashboard con deuda total
+- Detalle de deudas
+- Historial de pagos
+- Perfil de usuario
 
-## Credentials
-- **SuperAdmin**: `admin@debtmanager.ma` / `password123`
+### Fase 5: Offline Sync
+- IndexedDB con Dexie.js
+- Service Workers para PWA
+- Sync automático al reconectar
 
-## Key Files
-- `apps/superadmin-web/prisma/schema.prisma` - Database schema
-- `apps/superadmin-web/src/app/` - Next.js pages
-- `apps/superadmin-web/src/app/api/` - API routes
-- `apps/superadmin-web/src/lib/` - Utilities (auth, prisma)
-- `apps/debt_manager/lib/` - Flutter app (screens, services)
+### Fase 6: Suscripciones
+- Sistema de expiración
+- Verificación automática de suscripciones
+- **Plan Gratuito incluye Google Ads automáticamente**
 
-## Next Steps
-1. Deploy to Vercel: `cd apps/superadmin-web && vercel`
-2. Set up Vercel Postgres
-3. Update Flutter API URL to production domain
+---
 
-## Last Updated
-May 16, 2026
+## 🔧 LO AGREGADO RECIENTEMENTE
+
+### Plan Gratuito
+- Límite de 10 clientes
+- Límite de 20 productos
+- Google Ads habilitado automáticamente
+- Ubicación: `/superadmin/planes/gratis`
+
+### Configuración de Google Ads
+- Apartado en `/superadmin/ajustes`
+- Habilitar/deshabilitar anuncios globalmente
+- Plan por defecto (FREE)
+- Presupuesto global
+- Google AdSense Client ID
+- Información sobre cómo funcionan los ads
+
+---
+
+## 📁 Archivos Creados Recientemente
+
+- `apps/web/src/app/(superadmin)/superadmin/planes/gratis/page.tsx`
+- `apps/web/src/app/(superadmin)/superadmin/ajustes/page.tsx`
+- `packages/db/prisma/schema.prisma` (actualizado FREE)
+- `apps/web/src/components/sidebar.tsx` (actualizado con Ajustes)
+- `apps/web/src/app/api/settings/route.ts`
+
+---
+
+## ⏳ Pendiente
+
+1. **Integrar WafaCash/CashPlus** - Requiere contrato con dLocal/Payrails
+2. **Reportes PDF/CSV** - jspdf, xlsx
+3. **Deploy** - Vercel (gratis)
+
+---
+
+## ⚙️ Tech Stack
+
+| Componente | Tecnología |
+|------------|-------------|
+| Frontend Web | Next.js 14 + React |
+| Estilos | Tailwind CSS + ShadCN/UI |
+| Backend | Next.js API Routes |
+| DB | PostgreSQL + Prisma |
+| Auth | NextAuth.js |
+| Mobile | Expo (React Native) |
+| Offline | Dexie.js + Service Workers |
+
+---
+
+*Última actualización: Mayo 2026*
+*Plan gratuito con 10 clientes y Google Ads incluido*

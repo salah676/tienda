@@ -17,6 +17,7 @@ enum PlanType {
   BRONCE
   ORO
   PREMIUM
+  FREE
 }
 
 enum UnitType {
