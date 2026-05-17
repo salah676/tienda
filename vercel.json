@@ -1,6 +1,6 @@
 {
   "framework": "nextjs",
-  "buildCommand": "npm run db:generate && cd apps/web && npm run build",
+  "buildCommand": "npm run build:web",
   "devCommand": "cd apps/web && npm run dev",
   "installCommand": "npm install",
   "regions": ["iad1"],

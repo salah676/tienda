@@ -21,7 +21,9 @@ model Plan {
 model Tenant {
   id        String   @id @default(uuid())
   name      String
-  subdomain String   @unique
+  subdomain String?   @unique
+  logo      String?
+  banner    String?
   email     String   @unique
   password  String
   phone     String?
@@ -35,6 +37,7 @@ model Tenant {
   users     User[]
   clients   Client[]
   categories Category[]
+  qrcodes   QRCode[]
 
   @@index([planId])
 }
@@ -132,6 +135,32 @@ model Payment {
   reference String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model QRCode {
+  id          String       @id @default(uuid())
+  tenantId    String
+  tenant      Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  code        String       @unique
+  totalAmount Float
+  status      String       @default("PENDIENTE")
+  expiresAt   DateTime
+  validatedAt DateTime?
+  validatorId String?
+  items       QRCodeItem[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model QRCodeItem {
+  id           String   @id @default(uuid())
+  qrCodeId     String
+  qrCode       QRCode   @relation(fields: [qrCodeId], references: [id], onDelete: Cascade)
+  productName  String
+  quantity     Float
+  unitPrice    Float
+  totalPrice   Float
+  createdAt    DateTime @default(now())
 }
 
 model SuperAdmin {

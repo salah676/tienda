@@ -42,23 +42,14 @@ export async function POST(request: NextRequest) {
       data: {
         name,
         email,
+        password: hashed,
         logo,
         banner,
-        contactPhone: phone,
-        contactEmail: email,
+        phone,
+        address,
         planId,
-        subscriptionExpires: expiresAt,
+        expiresAt,
         isActive: true,
-      }
-    });
-
-    await prisma.user.create({
-      data: {
-        email,
-        password: hashed,
-        name: name,
-        role: 'ADMIN',
-        tenantId: tenant.id,
       }
     });
 

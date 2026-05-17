@@ -11,6 +11,7 @@ import {
   MessageSquare,
   UserCog,
   BarChart3,
+  QrCode,
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -21,6 +22,7 @@ interface SidebarProps {
 const superAdminLinks = [
   { href: '/superadmin', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/superadmin/tiendas', label: 'Tiendas', icon: Store },
+  { href: '/superadmin/productos-globales', label: 'Productos Globales', icon: Store },
   { href: '/superadmin/planes', label: 'Planes', icon: CreditCard },
   { href: '/superadmin/planes/gratis', label: 'Plan Gratis', icon: UserCog },
   { href: '/superadmin/ajustes', label: 'Ajustes', icon: Settings },
@@ -31,6 +33,7 @@ const adminLinks = (tenantId: string) => [
   { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
   { href: `/admin/clientes`, label: 'Clientes', icon: UserCog },
   { href: `/admin/productos`, label: 'Inventario', icon: Store },
+  { href: `/admin/qrcode`, label: 'Validar QR', icon: QrCode },
   { href: `/admin/deudas`, label: 'Deudas', icon: BarChart3 },
   { href: `/admin/pagos`, label: 'Pagos', icon: CreditCard },
   { href: `/admin/configuracion`, label: 'Configuración', icon: Settings },
