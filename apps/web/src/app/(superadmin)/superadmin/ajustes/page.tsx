@@ -18,6 +18,13 @@ interface GlobalSettings {
     defaultPlan: string;
     globalBudget: number;
     adsenseId: string;
+    conversionTracking: boolean;
+    remarketing: boolean;
+    defaultKeywords: string;
+    adPlacement: string;
+    cpcMax: number;
+    impressionLimit: number;
+    autoOptimization: boolean;
   };
   paymentGateways: {
     transferencia: boolean;
@@ -36,6 +43,13 @@ export default function SettingsPage() {
       defaultPlan: 'FREE',
       globalBudget: 100,
       adsenseId: '',
+      conversionTracking: true,
+      remarketing: true,
+      defaultKeywords: 'gestión de deudas, control de clientes, software para tiendas',
+      adPlacement: 'search',
+      cpcMax: 5.0,
+      impressionLimit: 10000,
+      autoOptimization: true,
     },
     paymentGateways: {
       transferencia: true,
@@ -235,12 +249,147 @@ export default function SettingsPage() {
                 </p>
               </div>
 
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="defaultKeywords">Palabras clave por defecto</Label>
+                  <Input
+                    id="defaultKeywords"
+                    value={settings.googleAds.defaultKeywords}
+                    onChange={(e) =>
+                      setSettings({
+                        ...settings,
+                        googleAds: { ...settings.googleAds, defaultKeywords: e.target.value },
+                      })
+                    }
+                    placeholder="palabra1, palabra2, palabra3"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="adPlacement">Tipo de campaña</Label>
+                  <Select
+                    value={settings.googleAds.adPlacement}
+                    onValueChange={(value) =>
+                      setSettings({
+                        ...settings,
+                        googleAds: { ...settings.googleAds, adPlacement: value },
+                      })
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="search">Búsqueda</SelectItem>
+                      <SelectItem value="display">Display (Display Network)</SelectItem>
+                      <SelectItem value="shopping">Shopping</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <Label htmlFor="cpcMax">CPC Máximo (MAD)</Label>
+                  <Input
+                    id="cpcMax"
+                    type="number"
+                    step="0.1"
+                    value={settings.googleAds.cpcMax}
+                    onChange={(e) =>
+                      setSettings({
+                        ...settings,
+                        googleAds: { ...settings.googleAds, cpcMax: parseFloat(e.target.value) },
+                      })
+                    }
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="impressionLimit">Límite de impresiones/día</Label>
+                  <Input
+                    id="impressionLimit"
+                    type="number"
+                    value={settings.googleAds.impressionLimit}
+                    onChange={(e) =>
+                      setSettings({
+                        ...settings,
+                        googleAds: { ...settings.googleAds, impressionLimit: parseInt(e.target.value) },
+                      })
+                    }
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="globalBudget">Presupuesto global (MAD/día)</Label>
+                  <Input
+                    id="globalBudget"
+                    type="number"
+                    value={settings.googleAds.globalBudget}
+                    onChange={(e) =>
+                      setSettings({
+                        ...settings,
+                        googleAds: { ...settings.googleAds, globalBudget: parseInt(e.target.value) },
+                      })
+                    }
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-4 border-t pt-4">
+                <h4 className="font-medium">Opciones avanzadas</h4>
+                <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <div>
+                    <p className="font-medium">Conversion Tracking</p>
+                    <p className="text-sm text-gray-500">Rastrear conversiones de anuncios</p>
+                  </div>
+                  <Switch
+                    checked={settings.googleAds.conversionTracking}
+                    onCheckedChange={(checked) =>
+                      setSettings({
+                        ...settings,
+                        googleAds: { ...settings.googleAds, conversionTracking: checked },
+                      })
+                    }
+                  />
+                </div>
+                <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <div>
+                    <p className="font-medium">Remarketing</p>
+                    <p className="text-sm text-gray-500">Anuncios para usuarios que ya visitaron</p>
+                  </div>
+                  <Switch
+                    checked={settings.googleAds.remarketing}
+                    onCheckedChange={(checked) =>
+                      setSettings({
+                        ...settings,
+                        googleAds: { ...settings.googleAds, remarketing: checked },
+                      })
+                    }
+                  />
+                </div>
+                <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <div>
+                    <p className="font-medium">Optimización automática</p>
+                    <p className="text-sm text-gray-500">Google optimiza automáticamente las campañas</p>
+                  </div>
+                  <Switch
+                    checked={settings.googleAds.autoOptimization}
+                    onCheckedChange={(checked) =>
+                      setSettings({
+                        ...settings,
+                        googleAds: { ...settings.googleAds, autoOptimization: checked },
+                      })
+                    }
+                  />
+                </div>
+              </div>
+
               <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
                 <p className="font-medium text-blue-800">💡 Información</p>
                 <ul className="text-sm text-blue-700 mt-2 space-y-1">
                   <li>• El Plan Gratuito incluye Google Ads automáticamente</li>
                   <li>• Los anuncios se muestran en la app del cliente</li>
                   <li>• El presupuesto global se divide entre todas las tiendas activas</li>
+                  <li>• El CPC máximo controla cuánto pagarás por cada clic</li>
+                  <li>• El remarketing permite alcanzar usuarios que ya conocen tu negocio</li>
                 </ul>
               </div>
             </CardContent>

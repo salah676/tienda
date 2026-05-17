@@ -26,9 +26,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'No autenticado' }, { status: 401 });
     }
 
-    const { name, subdomain, email, password, planId, phone, address } = await request.json();
+    const { name, email, password, planId, phone, address, logo, banner } = await request.json();
 
-    if (!name || !subdomain || !email || !password || !planId) {
+    if (!name || !email || !password || !planId) {
       return NextResponse.json({ error: 'Faltan campos requeridos' }, { status: 400 });
     }
 
@@ -41,13 +41,24 @@ export async function POST(request: NextRequest) {
     const tenant = await prisma.tenant.create({
       data: {
         name,
-        subdomain,
+        email,
+        logo,
+        banner,
+        contactPhone: phone,
+        contactEmail: email,
+        planId,
+        subscriptionExpires: expiresAt,
+        isActive: true,
+      }
+    });
+
+    await prisma.user.create({
+      data: {
         email,
         password: hashed,
-        phone,
-        address,
-        planId,
-        expiresAt,
+        name: name,
+        role: 'ADMIN',
+        tenantId: tenant.id,
       }
     });
 

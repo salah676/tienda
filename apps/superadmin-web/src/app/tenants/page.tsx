@@ -9,7 +9,7 @@ export default function TenantsPage() {
   const [plans, setPlans] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
-  const [form, setForm] = useState({ name: '', subdomain: '', email: '', password: '', planId: '', phone: '', address: '' });
+  const [form, setForm] = useState({ name: '', email: '', password: '', planId: '', phone: '', address: '', logo: '', banner: '', logoType: 'url', bannerType: 'url' });
 
   useEffect(() => {
     loadData();
@@ -36,7 +36,7 @@ export default function TenantsPage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(form)
     });
-    if (res.ok) { setShowForm(false); setForm({ name: '', subdomain: '', email: '', password: '', planId: '', phone: '', address: '' }); loadData(); }
+    if (res.ok) { setShowForm(false); setForm({ name: '', email: '', password: '', planId: '', phone: '', address: '', logo: '', banner: '', logoType: 'url', bannerType: 'url' }); loadData(); }
   };
 
   if (loading) return <div className="p-8">Cargando...</div>;
@@ -58,8 +58,7 @@ export default function TenantsPage() {
           <div className="bg-white p-6 rounded-lg shadow mb-6">
             <h2 className="text-lg font-semibold mb-4">Nueva Tienda</h2>
             <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <input placeholder="Nombre" value={form.name} onChange={e => setForm({...form, name: e.target.value})} className="border p-2 rounded" required />
-              <input placeholder="Subdominio" value={form.subdomain} onChange={e => setForm({...form, subdomain: e.target.value})} className="border p-2 rounded" required />
+              <input placeholder="Nombre de la tienda" value={form.name} onChange={e => setForm({...form, name: e.target.value})} className="border p-2 rounded" required />
               <input placeholder="Email" type="email" value={form.email} onChange={e => setForm({...form, email: e.target.value})} className="border p-2 rounded" required />
               <input placeholder="Password" type="password" value={form.password} onChange={e => setForm({...form, password: e.target.value})} className="border p-2 rounded" required />
               <select value={form.planId} onChange={e => setForm({...form, planId: e.target.value})} className="border p-2 rounded" required>
@@ -68,8 +67,57 @@ export default function TenantsPage() {
               </select>
               <input placeholder="Telefono" value={form.phone} onChange={e => setForm({...form, phone: e.target.value})} className="border p-2 rounded" />
               <input placeholder="Direccion" value={form.address} onChange={e => setForm({...form, address: e.target.value})} className="border p-2 rounded" />
+              
+              <div className="md:col-span-2 border-t pt-4 mt-2">
+                <h3 className="font-semibold mb-3">Logo y Portada</h3>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium mb-1">Tipo de logo</label>
+                <select value={form.logoType} onChange={e => setForm({...form, logoType: e.target.value})} className="border p-2 rounded w-full">
+                  <option value="url">URL externa</option>
+                  <option value="file">Subir archivo</option>
+                </select>
+              </div>
+              <div>
+                {form.logoType === 'url' ? (
+                  <input placeholder="URL del logo" value={form.logo} onChange={e => setForm({...form, logo: e.target.value})} className="border p-2 rounded w-full" />
+                ) : (
+                  <input type="file" accept="image/*" onChange={e => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onloadend = () => setForm({...form, logo: reader.result as string });
+                      reader.readAsDataURL(file);
+                    }
+                  }} className="border p-2 rounded w-full" />
+                )}
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium mb-1">Tipo de portada</label>
+                <select value={form.bannerType} onChange={e => setForm({...form, bannerType: e.target.value})} className="border p-2 rounded w-full">
+                  <option value="url">URL externa</option>
+                  <option value="file">Subir archivo</option>
+                </select>
+              </div>
+              <div>
+                {form.bannerType === 'url' ? (
+                  <input placeholder="URL de la portada" value={form.banner} onChange={e => setForm({...form, banner: e.target.value})} className="border p-2 rounded w-full" />
+                ) : (
+                  <input type="file" accept="image/*" onChange={e => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onloadend = () => setForm({...form, banner: reader.result as string });
+                      reader.readAsDataURL(file);
+                    }
+                  }} className="border p-2 rounded w-full" />
+                )}
+              </div>
+              
               <div className="md:col-span-2 flex gap-4">
-                <button type="submit" className="bg-blue-600 text-white px-6 py-2 rounded">Crear</button>
+                <button type="submit" className="bg-blue-600 text-white px-6 py-2 rounded">Crear Tienda</button>
                 <button type="button" onClick={() => setShowForm(false)} className="bg-gray-500 text-white px-6 py-2 rounded">Cancelar</button>
               </div>
             </form>

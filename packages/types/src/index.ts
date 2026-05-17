@@ -1,11 +1,12 @@
 export type Role = 'SUPERADMIN' | 'ADMIN' | 'CLIENTE';
 export type PlanType = 'BRONCE' | 'ORO' | 'PREMIUM';
-export type UnitType = 'PIEZA' | 'KILO' | 'GRAMO' | 'LITRO';
+export type UnitType = 'PIEZA' | 'KILO' | 'GRAMO' | 'LITRO' | 'UNID';
 export type PaymentMethod = 'TRANSFERENCIA' | 'WAFACASH' | 'CASHPLUS';
 export type PaymentStatus = 'PENDIENTE' | 'COMPLETADO' | 'FALLIDO';
 export type TenantStatus = 'ACTIVO' | 'SUSPENDIDO' | 'EXPIRADO';
 export type DebtStatus = 'PENDIENTE' | 'PARCIAL' | 'PAGADO' | 'CANCELADO';
 export type TicketStatus = 'ABIERTO' | 'EN_PROCESO' | 'CERRADO';
+export type QRCodeStatus = 'PENDIENTE' | 'VALIDADO' | 'EXPIRADO' | 'CANCELADO';
 
 export interface User {
   id: string;
@@ -127,5 +128,48 @@ export interface SyncItem {
   action: 'CREATE' | 'UPDATE' | 'DELETE';
   data: Record<string, unknown>;
   synced: boolean;
+  createdAt: Date;
+}
+
+export interface GlobalProduct {
+  id: string;
+  category: string;
+  nameEs: string;
+  nameFr?: string;
+  nameAr?: string;
+  price: number;
+  unitType: UnitType;
+  barcode?: string;
+  imageUrl?: string;
+  isActive: boolean;
+}
+
+export interface GlobalCategory {
+  id: string;
+  name: string;
+  nameEs: string;
+  nameFr?: string;
+  nameAr?: string;
+}
+
+export interface QRCodeItem {
+  id: string;
+  qrCodeId: string;
+  productName: string;
+  quantity: number;
+  unitPrice: number;
+  totalPrice: number;
+}
+
+export interface QRCode {
+  id: string;
+  tenantId: string;
+  code: string;
+  totalAmount: number;
+  status: QRCodeStatus;
+  expiresAt: Date;
+  validatedAt?: Date;
+  validatorId?: string;
+  items: QRCodeItem[];
   createdAt: Date;
 }

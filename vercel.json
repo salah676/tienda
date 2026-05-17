@@ -3,5 +3,14 @@
   "buildCommand": "npm run db:generate && cd apps/web && npm run build",
   "devCommand": "cd apps/web && npm run dev",
   "installCommand": "npm install",
-  "regions": ["iad1"]
+  "regions": ["iad1"],
+  "env": {
+    "DATABASE_URL": "@database-url",
+    "NEXTAUTH_SECRET": "@nextauth-secret",
+    "NEXTAUTH_URL": "@nextauth-url"
+  },
+  "github": {
+    "enabled": true,
+    "autoJobCancelation": true
+  }
 }
