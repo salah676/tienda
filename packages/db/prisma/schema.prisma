@@ -90,6 +90,7 @@ model Tenant {
   debts                 Debt[]
   payments              Payment[]
   supportTickets        SupportTicket[]
+  qrcodes               QRCode[]
 
   @@unique([subdomain])
   @@map("tenants")
