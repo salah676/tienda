@@ -4,13 +4,13 @@
   "devCommand": "cd apps/web && npm run dev",
   "installCommand": "npm install",
   "regions": ["iad1"],
-  "env": {
-    "DATABASE_URL": "@database-url",
-    "NEXTAUTH_SECRET": "@nextauth-secret",
-    "NEXTAUTH_URL": "@nextauth-url"
-  },
   "github": {
     "enabled": true,
     "autoJobCancelation": true
+  },
+  "build": {
+    "env": {
+      "NEXT_TELEMETRY_DISABLED": "1"
+    }
   }
 }

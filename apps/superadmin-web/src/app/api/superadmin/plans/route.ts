@@ -2,9 +2,24 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getSession } from '@/lib/auth';
 
+const DEFAULT_PLANS = [
+  { name: 'Gratis', price: 0, duration: 30, features: 'Hasta 10 clientes, productos basicos, 1 usuario' },
+  { name: 'Basico', price: 99, duration: 365, features: 'Hasta 100 clientes, productos ilimitados, reportes basicos' },
+  { name: 'Pro', price: 199, duration: 365, features: 'Clientes ilimitados, productos ilimitados, reportes avanzados, multiples usuarios' },
+  { name: 'Premium', price: 399, duration: 365, features: 'Todo incluido, soporte prioritario, API access, integraciones' },
+];
+
 export async function GET() {
   try {
-    const plans = await prisma.plan.findMany({ orderBy: { price: 'asc' } });
+    let plans = await prisma.plan.findMany({ orderBy: { price: 'asc' } });
+    
+    if (plans.length === 0) {
+      for (const plan of DEFAULT_PLANS) {
+        await prisma.plan.create({ data: plan });
+      }
+      plans = await prisma.plan.findMany({ orderBy: { price: 'asc' } });
+    }
+    
     return NextResponse.json({ success: true, data: plans });
   } catch (error) {
     console.error('Get plans error:', error);
