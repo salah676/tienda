@@ -85,7 +85,7 @@ export default function ProductosPage() {
   const [showBulkModal, setShowBulkModal] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [tenantId] = useState('demo-tenant-id');
+  const [tenantId, setTenantId] = useState<string>('');
 
   const [formData, setFormData] = useState({
     name: '',
@@ -97,27 +97,40 @@ export default function ProductosPage() {
   });
 
   useEffect(() => {
-    fetchProducts();
-    fetchCategories();
+    fetchUserAndData();
   }, []);
 
-  const fetchProducts = async () => {
+  const fetchUserAndData = async () => {
     try {
-      const res = await fetch(`/api/productos?tenantId=${tenantId}`);
+      const res = await fetch('/api/auth/me');
+      const data = await res.json();
+      if (data.success && data.user.tenantId) {
+        setTenantId(data.user.tenantId);
+        fetchProducts(data.user.tenantId);
+        fetchCategories(data.user.tenantId);
+      }
+    } catch (error) {
+      console.error('Error fetching user:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchProducts = async (tid: string) => {
+    try {
+      const res = await fetch(`/api/productos?tenantId=${tid}`);
       const data = await res.json();
       if (data.success) {
         setProducts(data.data);
       }
     } catch (error) {
       console.error('Error fetching products:', error);
-    } finally {
-      setLoading(false);
     }
   };
 
-  const fetchCategories = async () => {
+  const fetchCategories = async (tid: string) => {
     try {
-      const res = await fetch(`/api/categorias?tenantId=${tenantId}`);
+      const res = await fetch(`/api/categorias?tenantId=${tid}`);
       const data = await res.json();
       if (data.success) {
         setCategories(data.data);
