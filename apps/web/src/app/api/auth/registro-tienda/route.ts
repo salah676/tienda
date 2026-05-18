@@ -3,7 +3,7 @@ import prisma from '@debt-manager/db';
 
 export async function POST(request: Request) {
   try {
-    const { name, email, password, phone, subdomain } = await request.json();
+    const { name, email, password, phone, subdomain, logo, banner } = await request.json();
 
     if (!name || !email || !password || !subdomain) {
       return NextResponse.json({ success: false, error: 'Todos los campos son requeridos' }, { status: 400 });
@@ -36,6 +36,8 @@ export async function POST(request: Request) {
       data: {
         name,
         subdomain,
+        logo: logo || null,
+        banner: banner || null,
         isActive: true,
         status: 'ACTIVO',
         planId: freePlan.id,
@@ -55,12 +57,33 @@ export async function POST(request: Request) {
       },
     });
 
-    const defaultCategory = await prisma.category.create({
+    await prisma.category.create({
       data: {
         name: 'General',
         tenantId: tenant.id,
       },
     });
+
+    const superAdmin = await prisma.user.findFirst({
+      where: { role: 'SUPERADMIN' },
+    });
+
+    if (superAdmin) {
+      await prisma.notification.create({
+        data: {
+          userId: superAdmin.id,
+          title: 'Nueva Tienda Registrada',
+          message: `La tienda "${name}" (${subdomain}) se ha registrado exitosamente.`,
+          type: 'TIENDA_NUEVA',
+          data: {
+            tenantId: tenant.id,
+            tenantName: name,
+            subdomain: subdomain,
+            email: email,
+          },
+        },
+      });
+    }
 
     return NextResponse.json({
       success: true,

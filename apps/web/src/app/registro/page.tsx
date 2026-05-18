@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import { Image, Upload, X } from 'lucide-react';
 
 export default function RegistroPage() {
   const router = useRouter();
@@ -11,9 +12,24 @@ export default function RegistroPage() {
     password: '',
     phone: '',
     subdomain: '',
+    logo: '',
+    banner: '',
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const logoInputRef = useRef<HTMLInputElement>(null);
+  const bannerInputRef = useRef<HTMLInputElement>(null);
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>, field: 'logo' | 'banner') => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setForm({ ...form, [field]: reader.result as string });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,6 +73,61 @@ export default function RegistroPage() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Logo de la tienda
+              </label>
+              <div className="flex items-center gap-4">
+                <div
+                  onClick={() => logoInputRef.current?.click()}
+                  className="w-20 h-20 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center cursor-pointer hover:border-primary overflow-hidden"
+                >
+                  {form.logo ? (
+                    <img src={form.logo} alt="Logo" className="w-full h-full object-cover" />
+                  ) : (
+                    <Image className="w-8 h-8 text-gray-400" />
+                  )}
+                </div>
+                <input
+                  ref={logoInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleImageUpload(e, 'logo')}
+                  className="hidden"
+                />
+                <div className="text-sm text-gray-500">
+                  <p>Haz clic para subir</p>
+                  <p>PNG, JPG hasta 2MB</p>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Imagen de portada
+              </label>
+              <div
+                onClick={() => bannerInputRef.current?.click()}
+                className="w-full h-32 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center cursor-pointer hover:border-primary overflow-hidden relative"
+              >
+                {form.banner ? (
+                  <img src={form.banner} alt="Banner" className="w-full h-full object-cover" />
+                ) : (
+                  <div className="text-center">
+                    <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                    <p className="text-sm text-gray-500">Haz clic para subir</p>
+                  </div>
+                )}
+                <input
+                  ref={bannerInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleImageUpload(e, 'banner')}
+                  className="hidden"
+                />
+              </div>
+            </div>
+
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Nombre de la tienda
