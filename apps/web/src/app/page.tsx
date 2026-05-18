@@ -1,5 +1,9 @@
-import { redirect } from 'next/navigation';
-
 export default function Home() {
-  redirect('/login');
+  return (
+    <div style={{ padding: '50px', textAlign: 'center' }}>
+      <h1>Debt Manager</h1>
+      <p>Bienvenido</p>
+      <a href="/login" style={{ color: 'blue', fontSize: '20px' }}>Ir a Login</a>
+    </div>
+  );
 }
