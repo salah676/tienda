@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import prisma from '@debt-manager/db';
+import prisma from '@/lib/prisma';
 
 function mapUnitType(unitType: string) {
   switch (unitType?.toLowerCase()) {

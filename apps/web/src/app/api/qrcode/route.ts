@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import prisma from '@debt-manager/db';
+import prisma from '@/lib/prisma';
 import { v4 as uuidv4 } from 'uuid';
 
 function generateCode(): string {
