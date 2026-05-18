@@ -15,10 +15,7 @@
     "incremental": true,
     "plugins": [{ "name": "next" }],
     "paths": {
-      "@/*": ["./src/*"],
-      "@debt-manager/db": ["../../packages/db/src/index.ts"],
-      "@debt-manager/types": ["../../packages/types/src/index.ts"],
-      "@debt-manager/utils": ["../../packages/utils/src/index.ts"]
+      "@/*": ["./src/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

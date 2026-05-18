@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "npx prisma generate && next build",
+    "clean": "rmdir /s /q .next",
     "start": "next start",
     "lint": "next lint"
   },
