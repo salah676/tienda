@@ -21,12 +21,20 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: false, error: 'El subdominio ya está en uso' }, { status: 400 });
     }
 
-    const freePlan = await prisma.plan.findFirst({
+    let freePlan = await prisma.plan.findFirst({
       where: { price: 0 },
     });
 
     if (!freePlan) {
-      return NextResponse.json({ success: false, error: 'Error de configuración' }, { status: 500 });
+      await prisma.plan.createMany({
+        data: [
+          { name: 'Gratis', price: 0, duration: 30, features: 'Hasta 10 clientes' },
+          { name: 'Basico', price: 99, duration: 365, features: 'Hasta 100 clientes' },
+          { name: 'Pro', price: 199, duration: 365, features: 'Clientes ilimitados' },
+          { name: 'Premium', price: 399, duration: 365, features: 'Todo incluido' },
+        ],
+      });
+      freePlan = await prisma.plan.findFirst({ where: { price: 0 } });
     }
 
     const expiresAt = new Date();
